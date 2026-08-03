@@ -1,0 +1,58 @@
+name: Deploy Vue.js to GitHub Pages
+
+on:
+  # اجرای اتوماتیک هنگام پوش کردن به برنچ main (یا master)
+  push:
+    branches: ["main"]
+
+  # اجازه اجرای دستی از تب Actions در گیت‌هاب
+  workflow_dispatch:
+
+# تنظیمات دسترسی‌ها برای دیپلوی روی GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# اجازه فقط یک دیپلوی همزمان
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm' # یا 'yarn' / 'pnpm' بسته به پکیج منیجرت
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Build project
+        run: npm run build
+        
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # مسیر خروجی بیلد در Vue/Vite
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

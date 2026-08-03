@@ -1,0 +1,6 @@
+{
+  "name": "پزشک برتر - سامانه نوبت دهی و برندسازی پزشکان",
+  "description": "پلتفرم جامع خدمات پزشکی، جستجو و نوبت‌دهی پزشکان، مجله سلامت، خدمات برندسازی پزشکی و درگاه آنلاین پرداخت",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
